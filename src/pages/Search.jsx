@@ -37,7 +37,7 @@ class Search extends Component {
   };
 
   render() {
-    const { formArtist, isSaveButtonDisabled} = this.state;
+    const { formArtist, isSaveButtonDisabled } = this.state;
     return (
       <div data-testid="page-search">
         <Header />
