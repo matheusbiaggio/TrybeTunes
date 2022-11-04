@@ -7,7 +7,7 @@ import Favorites from './pages/Favorites';
 import Profile from './pages/Profile';
 import ProfileEdit from './pages/ProfileEdit';
 import NotFound from './pages/NotFound';
-import { createUser } from './services/userAPI';
+// import { createUser } from './services/userAPI';
 
 class App extends React.Component {
   state = {
@@ -16,10 +16,10 @@ class App extends React.Component {
   };
 
   // Chama a função createUser da userAPI
-  async componentDidMount() {
-    const response = await createUser();
-    return console.log(response);
-  }
+  // async componentDidMount() {
+  //   const response = await createUser();
+  //   return console.log(response);
+  // }
 
   // Valida se o input do formName tem mais do que 3 characters
   validateButton = () => {
