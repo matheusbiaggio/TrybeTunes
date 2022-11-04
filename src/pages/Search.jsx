@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import searchAlbumsAPI from '../services/searchAlbumsAPI';
+import Loading from '../components/Loading';
 
 class Search extends Component {
   state = {
     formArtist: '',
     isSaveButtonDisabled: true,
+    done: true,
+    prhaseResult: '',
+    albumList: [],
   };
 
   // Valida se o input do formName tem mais do que 3 characters
@@ -36,32 +42,85 @@ class Search extends Component {
     );
   };
 
+  onSaveButtonClick = async () => {
+    const {
+      formArtist,
+      isSaveButtonDisabled,
+      done,
+      prhaseResult,
+      albumList,
+    } = this.state;
+    const phrase = `Resultado de álbuns de: ${formArtist}`;
+    this.setState({
+      done: false,
+    });
+    const searchAlbum = await searchAlbumsAPI(formArtist);
+    console.log(searchAlbum, isSaveButtonDisabled, done, prhaseResult, albumList);
+    this.setState({
+      formArtist: '',
+      isSaveButtonDisabled: true,
+      done: true,
+      prhaseResult: phrase,
+      albumList: searchAlbum,
+    });
+  };
+
   render() {
-    const { formArtist, isSaveButtonDisabled } = this.state;
+    const {
+      formArtist,
+      isSaveButtonDisabled,
+      done,
+      prhaseResult,
+      albumList } = this.state;
     return (
       <div data-testid="page-search">
         <Header />
-        <form>
-          <label htmlFor="formArtist">
-            <input
-              data-testid="search-artist-input"
-              type="text"
-              placeholder="Nome do Artista"
-              id="formArtist"
-              name="formArtist"
-              value={ formArtist }
-              onChange={ this.onInputChange }
-            />
-          </label>
-          <button
-            data-testid="search-artist-button"
-            type="button"
-            disabled={ isSaveButtonDisabled }
-            onClick={ this.onSaveButtonClick }
-          >
-            Pesquisar
-          </button>
-        </form>
+        {
+          done
+            ? (
+              <form>
+                <label htmlFor="formArtist">
+                  <input
+                    data-testid="search-artist-input"
+                    type="text"
+                    placeholder="Nome do Artista"
+                    id="formArtist"
+                    name="formArtist"
+                    value={ formArtist }
+                    onChange={ this.onInputChange }
+                  />
+                </label>
+                <button
+                  data-testid="search-artist-button"
+                  type="button"
+                  disabled={ isSaveButtonDisabled }
+                  onClick={ this.onSaveButtonClick }
+                >
+                  Pesquisar
+                </button>
+              </form>)
+            : <Loading />
+        }
+        {prhaseResult}
+        {
+          albumList.length
+            ? (
+              <ul>
+                {albumList.map((album) => (
+                  <li key={ album.collectionId }>
+                    {album.collectionName}
+                    <Link
+                      to={ `/album/${album.collectionId}` }
+                      data-testid={ `link-to-album-${album.collectionId}` }
+                    >
+                      Pesquisar
+                    </Link>
+                  </li>))}
+              </ul>
+            )
+            : <spam>Nenhum álbum foi encontrado</spam>
+        }
+
       </div>
     );
   }
