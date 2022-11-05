@@ -9,6 +9,7 @@ import { addSong } from '../services/favoriteSongsAPI';
 class Album extends Component {
   state = {
     musics: [],
+    favoritesMusics: [],
     name: '',
     album: '',
     done: false,
@@ -17,25 +18,30 @@ class Album extends Component {
   async componentDidMount() {
     const { match: { params: { id } } } = this.props;
     const response = await musicList(id);
+    const onlyMusic = response.slice(1);
     this.setState({
       name: response[0].artistName,
       album: response[0].collectionName,
-      musics: response.slice(1),
+      musics: onlyMusic,
       done: true,
     });
   }
 
-  addFavorite = async (id) => {
-    const { musics } = this.state;
+  addFavorite = async (music) => {
+    const { musics, favoritesMusics } = this.state;
     this.setState({
       done: false,
     });
-    console.log('adicionou');
-    const addFavoriteSong = await addSong(...musics);
+    const selectedMusic = musics.findIndex(({ trackId }) => trackId === music.trackId);
+    const clickedMusic = musics[selectedMusic];
+    console.log('antes de mudar', clickedMusic.checked);
+    clickedMusic.checked = !clickedMusic.checked;
+    console.log('depois de mudar', clickedMusic.checked);
+    await addSong(music);
     this.setState({
       done: true,
+      favoritesMusics: { ...favoritesMusics, music },
     });
-    console.log(addFavoriteSong);
   };
 
   render() {
@@ -57,7 +63,7 @@ class Album extends Component {
                     musics.map((music) => (<MusicCard
                       musics={ music }
                       key={ music.trackId }
-                      addFavorite={ this.addFavorite }
+                      addFavorite={ () => this.addFavorite(music) }
                     />
                     ))
                   }
