@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import musicList from '../services/musicsAPI';
 import Loading from '../components/Loading';
 import MusicCard from '../components/MusicCard';
-// import { addSong } from '../services/favoriteSongsAPI';
+import { addSong } from '../services/favoriteSongsAPI';
 
 class Album extends Component {
   state = {
@@ -23,8 +23,17 @@ class Album extends Component {
     console.log(musics, done);
   }
 
-  addFavorite = () => {
+  addFavorite = async () => {
+    const { musics, done } = this.state;
+    this.setState({
+      done: false,
+    });
     console.log('adicionou');
+    const addFavoriteSong = await addSong(...musics);
+    this.setState({
+      done: true,
+    });
+    console.log(addFavoriteSong, done);
   };
 
   render() {
