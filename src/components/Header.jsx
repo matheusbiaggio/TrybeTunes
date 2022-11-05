@@ -10,13 +10,11 @@ class Header extends Component {
   };
 
   async componentDidMount() {
-    const { userNameState, done } = this.state;
     const userName = await getUser();
     this.setState({
       userNameState: userName.name,
       done: true,
     });
-    console.log(userNameState, done);
   }
 
   render() {

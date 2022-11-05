@@ -6,9 +6,7 @@ class MusicCard extends Component {
     const { musics, addFavorite } = this.props;
     return (
       <div>
-        <li
-          data-testid="artist-name"
-        >
+        <li>
           {musics.trackName}
         </li>
         <audio data-testid="audio-component" src={ musics.previewUrl } controls>
@@ -37,7 +35,7 @@ MusicCard.propTypes = {
     trackName: PropTypes.string.isRequired,
     previewUrl: PropTypes.string.isRequired,
     artistName: PropTypes.string.isRequired,
-    trackId: PropTypes.string.isRequired,
+    trackId: PropTypes.number.isRequired,
     collectionName: PropTypes.string.isRequired,
   }).isRequired,
 };

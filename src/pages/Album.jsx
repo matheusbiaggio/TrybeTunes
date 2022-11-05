@@ -9,22 +9,24 @@ import { addSong } from '../services/favoriteSongsAPI';
 class Album extends Component {
   state = {
     musics: [],
+    name: '',
+    album: '',
     done: false,
   };
 
   async componentDidMount() {
     const { match: { params: { id } } } = this.props;
-    const { musics, done } = this.state;
     const response = await musicList(id);
     this.setState({
+      name: response[0].artistName,
+      album: response[0].collectionName,
       musics: response.slice(1),
       done: true,
     });
-    console.log(musics, done);
   }
 
-  addFavorite = async () => {
-    const { musics, done } = this.state;
+  addFavorite = async (id) => {
+    const { musics } = this.state;
     this.setState({
       done: false,
     });
@@ -33,11 +35,11 @@ class Album extends Component {
     this.setState({
       done: true,
     });
-    console.log(addFavoriteSong, done);
+    console.log(addFavoriteSong);
   };
 
   render() {
-    const { musics, done } = this.state;
+    const { musics, done, name, album } = this.state;
     return (
       <div data-testid="page-album">
         <Header />
@@ -48,8 +50,8 @@ class Album extends Component {
           done
             ? (
               <div>
-                <h2 data-testid="artist-name">{musics[0].artistName}</h2>
-                <h3 data-testid="album-name">{musics[0].collectionName}</h3>
+                <h2 data-testid="artist-name">{name}</h2>
+                <h3 data-testid="album-name">{album}</h3>
                 <ul>
                   {
                     musics.map((music) => (<MusicCard

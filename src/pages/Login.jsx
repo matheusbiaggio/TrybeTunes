@@ -40,17 +40,16 @@ class Login extends Component {
   };
 
   onSaveButtonClick = async () => {
-    const { formName, done } = this.state;
+    const { formName } = this.state;
     const { history } = this.props;
 
     this.setState({
       done: false,
     });
-    const newUser = await createUser({ name: formName });
+    await createUser({ name: formName });
     this.setState({
       done: true,
     });
-    console.log(newUser, done);
     return (history.push('/search'));
   };
 
