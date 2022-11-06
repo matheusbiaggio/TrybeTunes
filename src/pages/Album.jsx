@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import musicList from '../services/musicsAPI';
 import Loading from '../components/Loading';
 import MusicCard from '../components/MusicCard';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 class Album extends Component {
   state = {
@@ -18,8 +18,10 @@ class Album extends Component {
   async componentDidMount() {
     const { match: { params: { id } } } = this.props;
     const response = await musicList(id);
+    const listFavoriteMusics = await getFavoriteSongs();
     const onlyMusic = response.slice(1);
     this.setState({
+      favoritesMusics: listFavoriteMusics,
       name: response[0].artistName,
       album: response[0].collectionName,
       musics: onlyMusic,
@@ -34,13 +36,11 @@ class Album extends Component {
     });
     const selectedMusic = musics.findIndex(({ trackId }) => trackId === music.trackId);
     const clickedMusic = musics[selectedMusic];
-    console.log('antes de mudar', clickedMusic.checked);
     clickedMusic.checked = !clickedMusic.checked;
-    console.log('depois de mudar', clickedMusic.checked);
     await addSong(music);
     this.setState({
       done: true,
-      favoritesMusics: { ...favoritesMusics, music },
+      favoritesMusics: { ...favoritesMusics, clickedMusic },
     });
   };
 
