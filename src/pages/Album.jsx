@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import musicList from '../services/musicsAPI';
 import Loading from '../components/Loading';
 import MusicCard from '../components/MusicCard';
-import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 
 class Album extends Component {
   state = {
@@ -29,8 +29,19 @@ class Album extends Component {
       album: response[0].collectionName,
       musics: onlyMusic,
       done: true,
-    });
+    }, () => { this.teste(); });
   }
+
+  teste = () => {
+    const { musics, favoritesMusics } = this.state;
+    for (let i = 0; i < musics.length; i += 1) {
+      for (let y = 0; y < favoritesMusics.length; y += 1) {
+        if (musics[i].trackId === favoritesMusics[y].trackId) {
+          musics[i].checked = true;
+        }
+      }
+    }
+  };
 
   addFavorite = async (music) => {
     const { musics, favoritesMusics } = this.state;
@@ -42,18 +53,23 @@ class Album extends Component {
     const selectedMusic = musics.findIndex(({ trackId }) => trackId === music.trackId);
     // pegando a musica clicada através do seu index no array de musicas
     const clickedMusic = musics[selectedMusic];
-    // lógica para checked ou unchecked e adicionando uma nova key na musica clicada para o tratamento da checkbox
-    clickedMusic.checked = !clickedMusic.checked;
-    // adicionando ao localStorage a musica favorita
-    await addSong(music);
+    // lógica para checked ou unchecked
+    if (clickedMusic.checked === true) {
+      clickedMusic.checked = false;
+      // remove a musica dos favoritos
+      await removeSong(music);
+    } else {
+      clickedMusic.checked = true;
+      // adiciona a musica aos favoritos
+      await addSong(music);
+    }
     this.setState({
       done: true,
     }, () => {
       this.setState({
-        favoritesMusics: { ...favoritesMusics },
+        favoritesMusics: { ...favoritesMusics, clickedMusic },
       });
     });
-    console.log(favoritesMusics);
   };
 
   render() {
