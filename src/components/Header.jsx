@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { getUser } from '../services/userAPI';
 import Navbar from './styled/sidebar/Navbar';
 import Sidebar from './styled/sidebar/Sidebar';
-import MainTitle from './styled/titles/Main';
+import { MainTitle } from './styled/titles/Main';
 import searchIcont from '../images/icon-search.svg';
 import favoriteIcon from '../images/favorite-icon.svg';
 import profileIcon from '../images/profile-icon.svg';

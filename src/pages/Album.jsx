@@ -5,6 +5,12 @@ import musicList from '../services/musicsAPI';
 import Loading from '../components/Loading';
 import MusicCard from '../components/MusicCard';
 import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
+import { Position } from '../components/styled/musicCard/MainPage';
+import {
+  MainTitle,
+  ThirdTitle,
+} from '../components/styled/musicCard/Titles';
+import ContainerCard from '../components/styled/searchPage/ContainerCard';
 
 class Album extends Component {
   state = {
@@ -76,29 +82,34 @@ class Album extends Component {
     const { musics, done, name, album } = this.state;
     return (
       <div data-testid="page-album">
-        <Header />
-        <p>
-          Banda:
-        </p>
-        {
-          done
-            ? (
-              <div>
-                <h2 data-testid="artist-name">{name}</h2>
-                <h3 data-testid="album-name">{album}</h3>
-                <ul>
-                  {
-                    musics.map((music) => (<MusicCard
-                      musics={ music }
-                      key={ music.trackId }
-                      addFavorite={ () => this.addFavorite(music) }
-                    />
-                    ))
-                  }
-                </ul>
-              </div>)
-            : <Loading />
-        }
+        <Position>
+          <Header />
+          <div>
+            {
+              done
+                ? (
+                  <div>
+                    <MainTitle>
+                      Banda:
+                    </MainTitle>
+                    <MainTitle data-testid="artist-name">{name}</MainTitle>
+                    <ThirdTitle data-testid="album-name">{album}</ThirdTitle>
+                    <ContainerCard>
+                      {
+                        musics.map((music) => (<MusicCard
+                          musics={ music }
+                          key={ music.trackId }
+                          addFavorite={ () => this.addFavorite(music) }
+                        />
+                        ))
+                      }
+                    </ContainerCard>
+                  </div>)
+                : <Loading />
+            }
+          </div>
+
+        </Position>
       </div>
     );
   }

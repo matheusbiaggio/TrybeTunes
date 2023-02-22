@@ -1,32 +1,34 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Container, Position } from './styled/musicCard/ContainerCard';
+import { Paragraph } from './styled/musicCard/Titles';
 
 class MusicCard extends Component {
   render() {
     const { musics, addFavorite } = this.props;
 
     return (
-      <div>
-        <li>
-          {musics.trackName}
-        </li>
+      <Container>
+        <Position>
+          <Paragraph>{musics.trackName}</Paragraph>
+          <label htmlFor={ `favorite-${musics.trackId}` }>
+            <input
+              data-testid={ `checkbox-music-${musics.trackId}` }
+              name={ `favorite-${musics.trackId}` }
+              type="checkbox"
+              id={ `favorite-${musics.trackId}` }
+              onChange={ addFavorite }
+              checked={ musics.checked }
+            />
+            Favoritar
+          </label>
+        </Position>
         <audio data-testid="audio-component" src={ musics.previewUrl } controls>
           <track kind="captions" />
           O seu navegador não suporta o elemento
           <code>audio</code>
         </audio>
-        <label htmlFor={ `favorite-${musics.trackId}` }>
-          Favorita
-          <input
-            data-testid={ `checkbox-music-${musics.trackId}` }
-            name={ `favorite-${musics.trackId}` }
-            type="checkbox"
-            id={ `favorite-${musics.trackId}` }
-            onChange={ addFavorite }
-            checked={ musics.checked }
-          />
-        </label>
-      </div>
+      </Container>
     );
   }
 }

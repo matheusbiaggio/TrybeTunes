@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
 import Loading from '../components/Loading';
 import Position from '../components/styled/searchPage/positionMainPage';
+import Input from '../components/styled/inputs/Searchbar';
+import Button from '../components/styled/buttons/Searchbar';
+import Searchbar from '../components/styled/searchBar/Searchbar';
+import Main from '../components/styled/searchPage/MainContent';
+import WrapperCenter from '../components/styled/wrapper/Centralize';
+import { CardWrapper, CardHeader } from '../components/styled/searchPage/Card';
+import ContainerCard from '../components/styled/searchPage/ContainerCard';
+import MainTitle from '../components/styled/titles/SearchTitle';
 
 class Search extends Component {
   state = {
@@ -67,6 +74,7 @@ class Search extends Component {
   };
 
   render() {
+    const { history } = this.props;
     const {
       formArtist,
       isSaveButtonDisabled,
@@ -80,52 +88,55 @@ class Search extends Component {
           {
             done
               ? (
-                <form>
-                  <label htmlFor="formArtist">
-                    <input
-                      data-testid="search-artist-input"
-                      type="text"
-                      placeholder="Nome do Artista"
-                      id="formArtist"
-                      name="formArtist"
-                      value={ formArtist }
-                      onChange={ this.onInputChange }
-                    />
-                  </label>
-                  <button
+                <Searchbar>
+                  <Input
+                    data-testid="search-artist-input"
+                    type="text"
+                    placeholder="O que voce quer ouvir?"
+                    id="formArtist"
+                    name="formArtist"
+                    value={ formArtist }
+                    onChange={ this.onInputChange }
+                  />
+                  <Button
                     data-testid="search-artist-button"
                     type="button"
                     disabled={ isSaveButtonDisabled }
                     onClick={ this.onSaveButtonClick }
                   >
                     Pesquisar
-                  </button>
-                </form>)
-              : <Loading />
+                  </Button>
+                </Searchbar>)
+              : <WrapperCenter><Loading /></WrapperCenter>
           }
-          {prhaseResult}
-          {
-            albumList.length
-              ? (
-                <ul>
-                  {albumList.map((album) => (
-                    <li key={ album.collectionId }>
-                      {album.collectionName}
-                      <Link
-                        to={ `/album/${album.collectionId}` }
-                        data-testid={ `link-to-album-${album.collectionId}` }
-                      >
-                        Pesquisar
-                      </Link>
-                    </li>))}
-                </ul>
-              )
-              : <spam>Nenhum álbum foi encontrado</spam>
-          }
+          <MainTitle>{prhaseResult}</MainTitle>
+          <Main>
+            {
+              albumList.length
+                ? (
+                  <ContainerCard>
+                    {albumList.map((album) => (
+                      <CardWrapper key={ album.collectionId }>
+                        <CardHeader>{album.collectionName}</CardHeader>
+                        <img src={ album.artworkUrl100 } alt={ album.collectionName } />
+                        <Button
+                          onClick={ () => (history.push(`/album/${album.collectionId}`)) }
+                          data-testid={ `link-to-album-${album.collectionId}` }
+                        >
+                          Selecionar
+                        </Button>
+                      </CardWrapper>))}
+                  </ContainerCard>
+                )
+                : <spam>Nenhum álbum foi encontrado</spam>
+            }
+          </Main>
         </div>
       </Position>
     );
   }
 }
+
+Search.propTypes = {}.isRequired;
 
 export default Search;

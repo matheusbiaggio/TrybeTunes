@@ -6,7 +6,7 @@ import WrapperCenter from '../components/styled/wrapper/Centralize';
 import LoginForm from '../components/styled/login/Form';
 import Button from '../components/styled/buttons/DefaultBtn';
 import Input from '../components/styled/inputs/DefaultInputs';
-import MainTitle from '../components/styled/titles/Main';
+import { MainTitle } from '../components/styled/titles/Main';
 import PositionBtn from '../components/styled/login/PositionBtn';
 import PositionInput from '../components/styled/login/PositionInput';
 import PositionTitle from '../components/styled/login/PositionTitle';
