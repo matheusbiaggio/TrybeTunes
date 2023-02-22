@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import searchAlbumsAPI from '../services/searchAlbumsAPI';
 import Loading from '../components/Loading';
+import Position from '../components/styled/searchPage/positionMainPage';
 
 class Search extends Component {
   state = {
@@ -73,55 +74,56 @@ class Search extends Component {
       prhaseResult,
       albumList } = this.state;
     return (
-      <div data-testid="page-search">
+      <Position data-testid="page-search">
         <Header />
-        {
-          done
-            ? (
-              <form>
-                <label htmlFor="formArtist">
-                  <input
-                    data-testid="search-artist-input"
-                    type="text"
-                    placeholder="Nome do Artista"
-                    id="formArtist"
-                    name="formArtist"
-                    value={ formArtist }
-                    onChange={ this.onInputChange }
-                  />
-                </label>
-                <button
-                  data-testid="search-artist-button"
-                  type="button"
-                  disabled={ isSaveButtonDisabled }
-                  onClick={ this.onSaveButtonClick }
-                >
-                  Pesquisar
-                </button>
-              </form>)
-            : <Loading />
-        }
-        {prhaseResult}
-        {
-          albumList.length
-            ? (
-              <ul>
-                {albumList.map((album) => (
-                  <li key={ album.collectionId }>
-                    {album.collectionName}
-                    <Link
-                      to={ `/album/${album.collectionId}` }
-                      data-testid={ `link-to-album-${album.collectionId}` }
-                    >
-                      Pesquisar
-                    </Link>
-                  </li>))}
-              </ul>
-            )
-            : <spam>Nenhum álbum foi encontrado</spam>
-        }
-
-      </div>
+        <div>
+          {
+            done
+              ? (
+                <form>
+                  <label htmlFor="formArtist">
+                    <input
+                      data-testid="search-artist-input"
+                      type="text"
+                      placeholder="Nome do Artista"
+                      id="formArtist"
+                      name="formArtist"
+                      value={ formArtist }
+                      onChange={ this.onInputChange }
+                    />
+                  </label>
+                  <button
+                    data-testid="search-artist-button"
+                    type="button"
+                    disabled={ isSaveButtonDisabled }
+                    onClick={ this.onSaveButtonClick }
+                  >
+                    Pesquisar
+                  </button>
+                </form>)
+              : <Loading />
+          }
+          {prhaseResult}
+          {
+            albumList.length
+              ? (
+                <ul>
+                  {albumList.map((album) => (
+                    <li key={ album.collectionId }>
+                      {album.collectionName}
+                      <Link
+                        to={ `/album/${album.collectionId}` }
+                        data-testid={ `link-to-album-${album.collectionId}` }
+                      >
+                        Pesquisar
+                      </Link>
+                    </li>))}
+                </ul>
+              )
+              : <spam>Nenhum álbum foi encontrado</spam>
+          }
+        </div>
+      </Position>
     );
   }
 }
