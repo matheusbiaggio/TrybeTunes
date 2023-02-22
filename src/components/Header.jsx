@@ -23,8 +23,7 @@ class Header extends Component {
       <header data-testid="header-component">
         {
           done
-            ? <p data-testid="header-user-name">{ userNameState }</p>
-            : <Loading />
+            && <p data-testid="header-user-name">{ userNameState }</p>
         }
         <Link to="/search" data-testid="link-to-search">Pesquisar</Link>
         <Link to="/favorites" data-testid="link-to-favorites">Favoritas</Link>

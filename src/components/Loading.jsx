@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import loadingGif from '../images/loading.gif';
 
 class Loading extends Component {
   render() {
     return (
-      <span>Carregando...</span>
+      <img src={ loadingGif } alt="loading" />
     );
   }
 }
